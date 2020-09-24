@@ -22,12 +22,12 @@ void setup() {
   lcd.setCursor(0, 0);
 }
 
-bool isInDeadZone(int joyX, int joyY) {
+bool isInDeadZone(std::pair<int,int> joystick) {
   int joyXCenterVal = 1715;
   int joyYCenterVal = 1776;
   int offset = 150;
-  bool deadX = joyX < joyXCenterVal + offset && joyX > joyXCenterVal - offset;
-  bool deadY = joyY < joyYCenterVal + offset && joyY > joyYCenterVal - offset;
+  bool deadX = joystick.first < joyXCenterVal + offset && joystick.first > joyXCenterVal - offset;
+  bool deadY = joystick.second < joyYCenterVal + offset && joystick.second > joyYCenterVal - offset;
   return deadX && deadY;
 }
 
@@ -44,7 +44,7 @@ std::pair<int, int> getJoystickValues() {
 
 void loop() {
   std::pair<int, int> joystick = getJoystickValues();
-  bool isMoving = isInDeadZone(joystick.first, joystick.second) == false;
+  bool isMoving = isInDeadZone(joystick) == false;
   if (isMoving) {
     formatPrintJoystickValues(joystick);
     String s = "X: " + String(joystick.first) + ", Y: " + String(joystick.second);
